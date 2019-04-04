@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using iGotUp.Api.Data;
 using iGotUp.Api.Data.Entities;
+using iGotUp.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,7 +36,12 @@ namespace iGotUp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<GotUpUser, IdentityRole<int>>(cfg => { cfg.User.RequireUniqueEmail = true; })
+            services.AddIdentity<GotUpUser, IdentityRole<int>>(cfg =>
+                {
+                    cfg.User.RequireUniqueEmail = true;
+                    cfg.Lockout.MaxFailedAccessAttempts = 4;
+                    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(365 * 200);
+                })
                 .AddEntityFrameworkStores<GotUpContext>();
 
             services.AddAuthentication()
@@ -54,11 +60,18 @@ namespace iGotUp.Api
 
             services.AddAutoMapper();
             services.AddTransient<GotUpSeeder>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddCors(cfg =>
             {
                 cfg.AddPolicy("GotUp",
                     bldr => { bldr.AllowAnyHeader().AllowAnyMethod().WithOrigins(this.config["WebsiteOrigin"]); });
+
+                cfg.AddPolicy("AnyGet",
+                    bldr =>
+                    {
+                        bldr.AllowAnyHeader().WithHeaders("GET").AllowAnyOrigin();
+                    });
             });
 
             services.AddMvc(opt =>

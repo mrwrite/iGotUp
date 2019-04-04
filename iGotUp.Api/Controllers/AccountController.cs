@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using iGotUp.Api.Data;
 using iGotUp.Api.Data.Entities;
+using iGotUp.Api.Services;
 using iGotUp.Api.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +26,7 @@ using MimeKit;
 
 namespace iGotUp.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [EnableCors("GotUp")]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> logger;
