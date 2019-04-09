@@ -28,7 +28,7 @@ namespace iGotUp.Api.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("azure_dc0577d3179686fa50a6a34ccba67975@azure.com", "Lotto Admin"),
+                From = new EmailAddress("aqwright@gmail.com", "iGotUp Admin"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

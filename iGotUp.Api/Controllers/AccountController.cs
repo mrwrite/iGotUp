@@ -159,7 +159,7 @@ namespace iGotUp.Api.Controllers
 
                             var webRoot = this.env.WebRootPath;
                             var pathToFile = this.env.WebRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
-                                             + Path.DirectorySeparatorChar.ToString() + "lottonewuser_email.html";
+                                             + Path.DirectorySeparatorChar.ToString() + "igotupnewuser_email.html";
                             var builder = new BodyBuilder();
 
                             using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
