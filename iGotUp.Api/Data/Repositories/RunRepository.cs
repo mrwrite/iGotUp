@@ -15,6 +15,7 @@ using Google.Maps.Geocoding;
 using Google.Maps.Places;
 using Google.Maps.Places.Details;
 using iGotUp.Api.Data.Entities;
+using iGotUp.Api.Data.Factories;
 using iGotUp.Api.Model;
 using iGotUp.Api.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -30,15 +31,15 @@ namespace iGotUp.Api.Data.Repositories
         private readonly IConfiguration configuration;
         private readonly GotUpContext ctx;
         private readonly ILogger<IRunRepository> logger;
+        private readonly IDbConnectionFactory connectionFactory;
         private string next_token;
-        private SqlConnection sqlConnection;
 
-        public RunRepository(IConfiguration configuration, GotUpContext ctx, ILogger<IRunRepository> logger)
+        public RunRepository(IConfiguration configuration, GotUpContext ctx, ILogger<IRunRepository> logger, IDbConnectionFactory connectionFactory)
         {
             this.configuration = configuration;
             this.ctx = ctx;
             this.logger = logger;
-            sqlConnection = new SqlConnection(this.configuration.GetConnectionString("iGotUpConnectionString"));
+            this.connectionFactory = connectionFactory;
         }
 
         public void addRun(Run run)
@@ -104,7 +105,7 @@ namespace iGotUp.Api.Data.Repositories
 
             try
             {
-                using (SqlConnection dbConnection = sqlConnection)
+                using (SqlConnection dbConnection = this.connectionFactory.CreateConnection("iGotUpConnectionString"))
                 {
                     dbConnection.Open();
                     using (SqlCommand cmd = new SqlCommand("dbo.get_run_details", dbConnection))
@@ -136,7 +137,7 @@ namespace iGotUp.Api.Data.Repositories
 
             try
             {
-                using (SqlConnection dbConnection = sqlConnection)
+                using (SqlConnection dbConnection = this.connectionFactory.CreateConnection("iGotUpConnectionString"))
                 {
                     dbConnection.Open();
 

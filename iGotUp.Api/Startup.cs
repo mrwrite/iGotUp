@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using iGotUp.Api.Data;
 using iGotUp.Api.Data.Entities;
+using iGotUp.Api.Data.Factories;
 using iGotUp.Api.Data.Repositories;
 using iGotUp.Api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +64,7 @@ namespace iGotUp.Api
             services.AddTransient<GotUpSeeder>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IRunRepository, RunRepository>();
+            services.AddScoped<IDbConnectionFactory, ConnectionFactory>();
 
             services.AddCors(cfg =>
             {
